@@ -1,24 +1,38 @@
 {{ define "main" }}
-<div class="home h-feed">
+  {{ range .Pages  }}
 
-  <ul class="post-list">
-	{{ $paginator := .Paginate (where .Data.Pages.ByDate.Reverse "Type" "post") (index .Site.Params "archive-paginate" | default 25) }}
-	{{ range $paginator.Pages  }}
-      <li class="h-entry">
-		{{ if .Title }}
-			<h1><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
-		{{ end }}
-
-        <a href="{{ .Permalink }}" class="u-url"><span class="post-meta"><time class="dt-published" datetime="{{ .Date.Format "2006-01-02 15:04:05 -0700" }}">{{ .Date.Format "Jan 2, 2006" }}</time></span></a>
-
-        <div class="e-content">
-         	{{ .Content }}
+    <article class="rounded overflow-hidden shadow-lg mt-4">
+      <a href="{{.Permalink}}">
+        <div class="post-card-content p-2 border-b-1 border border-t-0 border-r-0 border-l-0 bg-gray-100">
+          <span class="text-gray-500 font-light text-xs">
+            <time class="dt-published" datetime="{{.Date.Format "2006-01-02 15:04:05 -0700"}}">
+              {{.Date.Format "Jan 2, 2006"}}
+            </time>
+          </span>
+          <h2 class="text-2xl font-bold text-gray-800">{{.Title }}</h2>
         </div>
-      </li>
-    {{ end }}
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "feed.xml" | absURL }}">via RSS</a></p>
-
-</div>
+        <div class="p-2">
+          <!--
+          #if @post.image
+            <img class="h-64 w-full object-cover mb-4" src="@post.image" />
+          /if
+          -->
+          <p>
+            {{ .Content  }}
+          </p>
+        </div>
+      </a>
+        <!--
+        <div class="p-2">
+          <div class="my-4">
+          #each @post.tags as |tag|
+            #link-to 'tag' tag.id
+              <span class="text-gray-500 rounded-full bg-gray-300 py-2 px-4 mr-2 text-sm">#tag.name</span>
+            /link-to
+          /each}}
+          </div>
+        </div>
+        -->
+    </article>
+  {{ end }}
 {{ end }}
